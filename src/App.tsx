@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Header } from "./components/Header/Index"
-import { Tasks } from "./components/Tasks/Index"
+import { Tasks } from "./components/TasksList/Index"
 
 export interface Itask {
   id: string;
@@ -10,22 +10,47 @@ export interface Itask {
 
 function App() {
 
-  const [tasks, setTasks] = useState<Itask[]>([
-    {
-      id: "teste",
-      title: "test",
-      isCompleted: true,
-    }, {
-      id: "teste2",
-      title: "test2",
-      isCompleted: false,
-    }
-  ])
+  const [tasks, setTasks] = useState<Itask[]>([])
+
+  function addTask(taskTitle: string) {
+    setTasks([
+      ...tasks,
+      {
+        id: crypto.randomUUID(),
+        title: taskTitle,
+        isCompleted: true,
+      }
+    ])
+  }
+
+
+  function toggleTaskCompletedById(taskId: string) {
+    const newTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          isCompleted: !task.isCompleted
+        }
+      }
+      return task;
+    })
+    setTasks(newTasks)
+  }
+
+
+  function deleteTask(taskId: string) {
+    const newTasks = tasks.filter(task => task.id !== taskId);
+    setTasks(newTasks);
+  }
+
 
   return (
     <>
-      <Header />
-      <Tasks tasks={tasks} />
+      <Header onAddTask={addTask} />
+      <Tasks
+        tasks={tasks}
+        onDelete={deleteTask}
+        onComplete={toggleTaskCompletedById} />
     </>
   )
 }
