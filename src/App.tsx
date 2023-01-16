@@ -1,9 +1,13 @@
+import { Header } from "./components/Header/Index"
+import { Tasks } from "./components/Tasks/Index"
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div>oi</div>
+    <>
+      <Header />
+      <Tasks />
+    </>
   )
 }
 
